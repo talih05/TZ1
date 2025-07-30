@@ -13,4 +13,8 @@ class MyViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
         _editTextVM.value = newText
     }
 
+    fun clearText (){
+        _editTextVM.value=""
+    }
+
 }

@@ -37,6 +37,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.buttonRemove.setOnClickListener {
+            viewModel.clearText()
+        }
+
     }
 
 }

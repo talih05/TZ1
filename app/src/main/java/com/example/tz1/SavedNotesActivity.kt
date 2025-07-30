@@ -13,7 +13,7 @@ import com.example.tz1.databinding.SavedNotesBinding
 class SavedNotesActivity : AppCompatActivity() {
 
     private lateinit var binding: SavedNotesBinding
-    private val viewModel:MyViewModel by viewModels()
+    private val viewModel:MyViewModel2 by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +21,13 @@ class SavedNotesActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val resultText = intent.getStringExtra("text_key")
-        binding.textV.text = resultText
+
+        if (viewModel.textView.value == null && resultText!= null) {
+            viewModel.setTextView(resultText)
+        }
+
+        viewModel.textView.observe(this){text ->
+            binding.textV.text= text
+        }
     }
 }
