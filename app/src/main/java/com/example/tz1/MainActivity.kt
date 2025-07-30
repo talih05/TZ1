@@ -1,44 +1,40 @@
 package com.example.tz1
 
+
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.tz1.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
+     private val viewModel:MyViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val EditText = findViewById <EditText> (R.id.edit_text)
-        val ButtonSave = findViewById<Button>(R.id.button_save)
-        val ButtonOpen = findViewById<Button>(R.id.button_open)
-        val ButtonRemove = findViewById<Button>(R.id.button_remove)
-        lateinit var editText: String
-        val sharedPref = getSharedPreferences("saved_note", Context.MODE_PRIVATE)
-
-        ButtonSave.setOnClickListener {
-            val editor = sharedPref.edit()
-            val editText = EditText.text
-
-
-            with(editor){
-                putString("savenote",editText.toString())
-            }.apply()
+        viewModel.editTextVM.observe(this){ text ->
+            binding.editText.setText(text)
         }
 
-        ButtonOpen.setOnClickListener {
-            intent = Intent(this,SavedNotesActivity::class.java)
+        binding.buttonOpen.setOnClickListener {
+            val inputText = binding.editText.text.toString()
+            viewModel.setEditText(inputText)
+
+            val intent = Intent (this,SavedNotesActivity::class.java)
+            intent.putExtra("text_key", inputText)
             startActivity(intent)
-        }
-
-        ButtonRemove.setOnClickListener {
-            sharedPref.edit().remove("savenote").apply()
         }
 
     }
